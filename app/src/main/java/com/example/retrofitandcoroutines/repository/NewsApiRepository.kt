@@ -9,8 +9,8 @@ class NewsApiRepository() {
     @WorkerThread
     suspend fun getNewsTopHeadlines() = RetrofitBuilder.apiService
         .getNewsTopHeadlines(
-            Constants.SOURCES,
+            Constants.COUNTRY,
+            Constants.CATEGORY,
             Constants.API_KEY
         )
-
 }

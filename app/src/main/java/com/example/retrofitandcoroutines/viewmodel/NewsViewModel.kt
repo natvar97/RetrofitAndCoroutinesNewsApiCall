@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.retrofitandcoroutines.model.Articles
 import com.example.retrofitandcoroutines.model.NewsEntity
 import com.example.retrofitandcoroutines.repository.NewsApiRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
@@ -22,8 +24,10 @@ class NewsViewModel(
     private fun fetchNews() {
         viewModelScope.launch {
             try {
-                val news = repository.getNewsTopHeadlines()
-                newsList.postValue(news)
+                coroutineScope {
+                    val news = async { repository.getNewsTopHeadlines() }
+                    newsList.postValue(news.await())
+                }
             } catch (e: Exception) {
                 emptyList<Articles>()
             }
